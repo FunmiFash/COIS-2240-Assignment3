@@ -5,7 +5,7 @@ public class VehicleRentalApp {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        RentalSystem rentalSystem = RentalSystem.getInstance_vai(); // Singleton already loads data
+        RentalSystem rentalSystem = RentalSystem.getInstance_vai();
 
         while (true) {
             System.out.println("\n1: Add Vehicle\n" +
@@ -26,10 +26,11 @@ public class VehicleRentalApp {
                 continue;
             }
 
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             switch (choice) {
 
+                // ✅ ADD VEHICLE
                 case 1:
                     System.out.println("  1: Car\n" +
                                        "  2: Minibus\n" +
@@ -85,14 +86,25 @@ public class VehicleRentalApp {
                     }
 
                     if (vehicle != null) {
-                        vehicle.setLicensePlate(plate);
-                        rentalSystem.addVehicle(vehicle);
-                        System.out.println("✅ Vehicle added successfully.");
+                        try {
+                            vehicle.setLicensePlate(plate);
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("❌ Invalid license plate format!");
+                            break;
+                        }
+
+                        if (rentalSystem.addVehicle_vai(vehicle)) {
+                            System.out.println("✅ Vehicle added successfully.");
+                        } else {
+                            System.out.println("❌ Duplicate vehicle.");
+                        }
+
                     } else {
                         System.out.println("❌ Invalid vehicle type.");
                     }
                     break;
 
+                // ✅ ADD CUSTOMER
                 case 2:
                     try {
                         System.out.print("Enter customer ID (number): ");
@@ -102,8 +114,11 @@ public class VehicleRentalApp {
                         System.out.print("Enter name: ");
                         String cname = scanner.nextLine();
 
-                        rentalSystem.addCustomer(new Customer(cid, cname));
-                        System.out.println("✅ Customer added successfully.");
+                        if (rentalSystem.addCustomer_vai(new Customer(cid, cname))) {
+                            System.out.println("✅ Customer added successfully.");
+                        } else {
+                            System.out.println("❌ Duplicate customer.");
+                        }
 
                     } catch (Exception e) {
                         System.out.println("❌ Invalid input!");
@@ -111,6 +126,7 @@ public class VehicleRentalApp {
                     }
                     break;
 
+                // ✅ RENT VEHICLE
                 case 3:
                     rentalSystem.displayVehicles(Vehicle.VehicleStatus.Available);
 
@@ -122,7 +138,7 @@ public class VehicleRentalApp {
 
                     int cidRent;
                     try {
-                        System.out.print("Enter customer ID (number): ");
+                        System.out.print("Enter customer ID: ");
                         cidRent = scanner.nextInt();
                     } catch (Exception e) {
                         System.out.println("❌ Enter a valid number!");
@@ -135,22 +151,22 @@ public class VehicleRentalApp {
                     double rentAmount = scanner.nextDouble();
                     scanner.nextLine();
 
-                    Vehicle vehicleToRent = rentalSystem.findVehicleByPlate(rentPlate);
-                    Customer customerToRent = rentalSystem.findCustomerById(cidRent);
+                    Vehicle vRent = rentalSystem.findVehicleByPlate(rentPlate);
+                    Customer cRent = rentalSystem.findCustomerById(cidRent);
 
-                    if (vehicleToRent == null || customerToRent == null) {
+                    if (vRent == null || cRent == null) {
                         System.out.println("❌ Vehicle or customer not found.");
                         break;
                     }
 
-                    if (vehicleToRent.getStatus() != Vehicle.VehicleStatus.Available) {
-                        System.out.println("❌ Vehicle is not available.");
-                        break;
+                    if (rentalSystem.rentVehicle_vai(vRent, cRent, LocalDate.now(), rentAmount)) {
+                        System.out.println("✅ Vehicle rented successfully.");
+                    } else {
+                        System.out.println("❌ Rental failed.");
                     }
-
-                    rentalSystem.rentVehicle(vehicleToRent, customerToRent, LocalDate.now(), rentAmount);
                     break;
 
+                // ✅ RETURN VEHICLE
                 case 4:
                     rentalSystem.displayVehicles(Vehicle.VehicleStatus.Rented);
 
@@ -162,7 +178,7 @@ public class VehicleRentalApp {
 
                     int cidReturn;
                     try {
-                        System.out.print("Enter customer ID (number): ");
+                        System.out.print("Enter customer ID: ");
                         cidReturn = scanner.nextInt();
                     } catch (Exception e) {
                         System.out.println("❌ Enter a valid number!");
@@ -175,15 +191,19 @@ public class VehicleRentalApp {
                     double returnFees = scanner.nextDouble();
                     scanner.nextLine();
 
-                    Vehicle vehicleToReturn = rentalSystem.findVehicleByPlate(returnPlate);
-                    Customer customerToReturn = rentalSystem.findCustomerById(cidReturn);
+                    Vehicle vReturn = rentalSystem.findVehicleByPlate(returnPlate);
+                    Customer cReturn = rentalSystem.findCustomerById(cidReturn);
 
-                    if (vehicleToReturn == null || customerToReturn == null) {
+                    if (vReturn == null || cReturn == null) {
                         System.out.println("❌ Vehicle or customer not found.");
                         break;
                     }
 
-                    rentalSystem.returnVehicle(vehicleToReturn, customerToReturn, LocalDate.now(), returnFees);
+                    if (rentalSystem.returnVehicle_vai(vReturn, cReturn, LocalDate.now(), returnFees)) {
+                        System.out.println("✅ Vehicle returned successfully.");
+                    } else {
+                        System.out.println("❌ Return failed.");
+                    }
                     break;
 
                 case 5:
