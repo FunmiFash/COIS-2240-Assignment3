@@ -1,3 +1,3 @@
-AAA111,Toyota,Corolla,2019,Rented
-BBB222,Honda,Civic,2019,Rented
-CCC333,Ford,Focus,2024,Rented
+AAA111,Toyota,Corolla,2019,Available
+BBB222,Honda,Civic,2019,Available
+CCC333,Ford,Focus,2024,Available
