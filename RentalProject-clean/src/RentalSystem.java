@@ -12,7 +12,6 @@ public class RentalSystem {
     private List<Customer> customers = new ArrayList<>();
     private RentalHistory rentalHistory = new RentalHistory();
 
-    // ✅ Singleton constructor
     private RentalSystem() {
         loadData_vai();
     }
@@ -24,7 +23,6 @@ public class RentalSystem {
         return instance_vai;
     }
 
-    // ✅ ADD VEHICLE
     public boolean addVehicle_vai(Vehicle vehicle) {
         if (findVehicleByPlate(vehicle.getLicensePlate()) != null) {
             System.out.println("Duplicate vehicle!");
@@ -36,7 +34,6 @@ public class RentalSystem {
         return true;
     }
 
-    // ✅ ADD CUSTOMER
     public boolean addCustomer_vai(Customer customer) {
         if (findCustomerById(customer.getCustomerId()) != null) {
             System.out.println("Duplicate customer!");
@@ -48,7 +45,6 @@ public class RentalSystem {
         return true;
     }
 
-    // ✅ RENT VEHICLE
     public boolean rentVehicle_vai(Vehicle vehicle, Customer customer, LocalDate date, double amount) {
         if (vehicle.getStatus() != Vehicle.VehicleStatus.Available) {
             return false;
@@ -65,7 +61,6 @@ public class RentalSystem {
         return true;
     }
 
-    // ✅ RETURN VEHICLE
     public boolean returnVehicle_vai(Vehicle vehicle, Customer customer, LocalDate date, double extraFees) {
         if (vehicle.getStatus() != Vehicle.VehicleStatus.Rented) {
             return false;
@@ -82,7 +77,6 @@ public class RentalSystem {
         return true;
     }
 
-    // ✅ DISPLAY VEHICLES
     public void displayVehicles(Vehicle.VehicleStatus status) {
         System.out.println("\n=== " + (status == null ? "All" : status) + " Vehicles ===");
 
@@ -116,7 +110,6 @@ public class RentalSystem {
         }
     }
 
-    // ✅ FIND METHODS
     public Vehicle findVehicleByPlate(String plate) {
         for (Vehicle v : vehicles) {
             if (v.getLicensePlate().equalsIgnoreCase(plate)) {
@@ -135,7 +128,6 @@ public class RentalSystem {
         return null;
     }
 
-    // ✅ SAVE METHODS
     public void saveVehicle_vai(Vehicle vehicle) {
         try (FileWriter writer = new FileWriter("vehicles.txt", true)) {
             writer.write(
@@ -175,7 +167,6 @@ public class RentalSystem {
         }
     }
 
-    // ✅ REWRITE VEHICLE FILE
     private void rewriteVehiclesFile_vai() {
         try (FileWriter writer = new FileWriter("vehicles.txt", false)) {
             for (Vehicle v : vehicles) {
@@ -192,7 +183,6 @@ public class RentalSystem {
         }
     }
 
-    // ✅ LOAD DATA
     public void loadData_vai() {
         loadVehicles_vai();
         loadCustomers_vai();

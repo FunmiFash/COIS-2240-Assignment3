@@ -30,7 +30,6 @@ public class VehicleRentalApp {
 
             switch (choice) {
 
-                // ✅ ADD VEHICLE
                 case 1:
                     System.out.println("  1: Car\n" +
                                        "  2: Minibus\n" +
@@ -104,7 +103,6 @@ public class VehicleRentalApp {
                     }
                     break;
 
-                // ✅ ADD CUSTOMER
                 case 2:
                     try {
                         System.out.print("Enter customer ID (number): ");
@@ -126,7 +124,6 @@ public class VehicleRentalApp {
                     }
                     break;
 
-                // ✅ RENT VEHICLE
                 case 3:
                     rentalSystem.displayVehicles(Vehicle.VehicleStatus.Available);
 
@@ -166,7 +163,6 @@ public class VehicleRentalApp {
                     }
                     break;
 
-                // ✅ RETURN VEHICLE
                 case 4:
                     rentalSystem.displayVehicles(Vehicle.VehicleStatus.Rented);
 
